@@ -1,0 +1,13 @@
+<resources>
+
+    <style name="Theme.Moment.Normal" parent="@style/Base.Theme.Moment.Normal" />
+
+    <style name="Theme.Moment.Dialog" parent="@style/Base.Theme.Moment.Dialog" />
+
+    <style name="Theme.Moment.Dialog.Alert" parent="@style/Base.Theme.Moment.Dialog.Alert" />
+
+    <style name="Theme.Moment.Preferences" parent="@style/Base.Theme.Moment.Preferences" />
+
+    <style name="Theme.Moment.Splash" parent="@style/Theme.Moment.Normal" />
+
+</resources>

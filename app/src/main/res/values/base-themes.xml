@@ -1,0 +1,26 @@
+<resources>
+
+    <style name="Base.Theme.Moment.Normal" parent="@style/MC.Theme.Moment">
+        <item name="preferenceTheme">@style/Theme.Moment.Preferences</item>
+        <item name="dialogTheme">@style/Theme.Moment.Dialog</item>
+        <item name="alertDialogTheme">@style/Theme.Moment.Dialog.Alert</item>
+    </style>
+
+    <style name="Base.Theme.Moment.Dialog" parent="@style/MC.Theme.Moment.Dialog">
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
+
+    <style name="Base.Theme.Moment.Dialog.Alert" parent="@style/MC.Theme.Moment.Dialog.Alert">
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
+
+    <style name="Base.Theme.Moment.Preferences" parent="@style/MC.Theme.Moment.Preferences">
+        <item name="dialogTheme">@style/Theme.Moment.Dialog</item>
+        <item name="alertDialogTheme">@style/Theme.Moment.Dialog.Alert</item>
+    </style>
+
+    <style name="Base.Theme.Moment.Splash" parent="@style/Base.Theme.Moment.Normal">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
+</resources>
