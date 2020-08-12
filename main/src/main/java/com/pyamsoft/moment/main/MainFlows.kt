@@ -24,9 +24,7 @@ data class MainViewState(
     val appNameRes: Int
 ) : UiViewState
 
-sealed class MainViewEvent : UiViewEvent {
-
-}
+sealed class MainViewEvent : UiViewEvent
 
 sealed class MainControllerEvent : UiControllerEvent {
 

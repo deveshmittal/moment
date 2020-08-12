@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment;
+package com.pyamsoft.moment
 
 import android.app.Activity
 import android.app.Application
