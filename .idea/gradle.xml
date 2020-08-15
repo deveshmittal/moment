@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/chart" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/main" />
+            <option value="$PROJECT_DIR$/yfinance" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

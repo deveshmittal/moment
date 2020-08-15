@@ -19,11 +19,9 @@ package com.pyamsoft.moment
 import android.app.Application
 import com.pyamsoft.moment.core.PRIVACY_POLICY_URL
 import com.pyamsoft.moment.core.TERMS_CONDITIONS_URL
-import com.pyamsoft.moment.main.MainActivity
 import com.pyamsoft.pydroid.bootstrap.libraries.OssLibraries
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.pydroid.util.isDebugMode
-import com.squareup.moshi.Moshi
 
 class Moment : Application() {
 
@@ -39,7 +37,7 @@ class Moment : Application() {
             TERMS_CONDITIONS_URL,
             BuildConfig.VERSION_CODE
         )
-        PYDroid.init(this, parameters) { provider ->
+        PYDroid.init(this, parameters) {
             component = DaggerMomentComponent.factory().create(this, isDebugMode())
             onInitialized()
         }

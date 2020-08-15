@@ -16,15 +16,12 @@
 
 package com.pyamsoft.moment
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import androidx.annotation.CheckResult
 import com.pyamsoft.moment.chart.ChartComponent
 import com.pyamsoft.moment.main.MainComponent
-import com.pyamsoft.pydroid.loader.ImageLoader
-import com.pyamsoft.pydroid.ui.theme.Theming
-import com.squareup.moshi.Moshi
+import com.pyamsoft.moment.yfinance.YFinanceModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -33,7 +30,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [MomentComponent.MomentProvider::class])
+@Component(modules = [MomentComponent.MomentProvider::class, YFinanceModule::class])
 internal interface MomentComponent {
 
     @CheckResult

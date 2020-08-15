@@ -38,7 +38,7 @@ class MainViewModel @Inject internal constructor(
         withState {
             if (!versionChecked) {
                 versionChecked = true
-                publish(MainControllerEvent.VersionCheck)
+                 publish(MainControllerEvent.VersionCheck)
             }
         }
     }

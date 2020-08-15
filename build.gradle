@@ -55,6 +55,11 @@ buildscript {
 
 		// sparkline chart
 		spark = "1.2.0"
+
+		// Network
+		moshi = "1.9.3"
+		retrofit = '2.9.0'
+		okhttp = "4.8.0"
 	}
 
 	dependencies {
