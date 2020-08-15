@@ -52,6 +52,9 @@ buildscript {
 		fastAdapter = "5.2.2"
 
 		workmanager = "2.4.0"
+
+		// sparkline chart
+		spark = "1.2.0"
 	}
 
 	dependencies {
