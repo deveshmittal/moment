@@ -20,7 +20,6 @@ import android.view.ViewGroup
 import androidx.annotation.CheckResult
 import com.pyamsoft.moment.chart.databinding.ChartviewBinding
 import com.pyamsoft.pydroid.arch.BaseUiView
-import com.robinhood.spark.SparkAdapter
 import javax.inject.Inject
 
 class ChartView @Inject internal constructor(
@@ -31,13 +30,11 @@ class ChartView @Inject internal constructor(
 
     override val layoutRoot by boundView { chartviewRoot }
 
-    private var adapter: MyAdapter? = null
+    private var adapter: MomentChartAdapter? = null
 
     init {
         doOnInflate {
-            val newAdapter = MyAdapter()
-            binding.chartviewChart.adapter = newAdapter
-            adapter = newAdapter
+            adapter = MomentChartAdapter().also { it.bindTo(binding.chartviewChart) }
         }
 
         doOnTeardown {
@@ -48,7 +45,7 @@ class ChartView @Inject internal constructor(
     }
 
     @CheckResult
-    private fun usingAdapter(): MyAdapter {
+    private fun usingAdapter(): MomentChartAdapter {
         return requireNotNull(adapter)
     }
 
@@ -60,26 +57,4 @@ class ChartView @Inject internal constructor(
         usingAdapter().submitList(dataPoints)
     }
 
-    private class MyAdapter : SparkAdapter() {
-
-        private var data: List<ChartViewState.DataPoint> = emptyList()
-
-        fun submitList(newData: List<ChartViewState.DataPoint>?) {
-            data = newData ?: emptyList()
-            notifyDataSetChanged()
-        }
-
-        override fun getY(index: Int): Float {
-            return getItem(index).y
-        }
-
-        override fun getItem(index: Int): ChartViewState.DataPoint {
-            return data[index]
-        }
-
-        override fun getCount(): Int {
-            return data.size
-        }
-
-    }
 }
