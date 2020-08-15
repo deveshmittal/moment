@@ -18,6 +18,7 @@ package com.pyamsoft.moment.chart
 
 import android.view.ViewGroup
 import androidx.annotation.CheckResult
+import androidx.core.view.updateLayoutParams
 import com.pyamsoft.moment.chart.databinding.ChartviewBinding
 import com.pyamsoft.pydroid.arch.BaseUiView
 import javax.inject.Inject
@@ -53,8 +54,15 @@ class ChartView @Inject internal constructor(
         handleDataPoints(state.dataPoints)
     }
 
-    private fun handleDataPoints(dataPoints: List<ChartViewState.DataPoint>) {
+    private fun handleDataPoints(dataPoints: List<ChartDataPoint>) {
         usingAdapter().submitList(dataPoints)
+    }
+
+    fun updateLayoutDimensions(width: Int, height: Int) {
+        binding.root.updateLayoutParams {
+            this.width = width
+            this.height = height
+        }
     }
 
 }

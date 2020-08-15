@@ -23,9 +23,9 @@ internal class MomentChartAdapter internal constructor() : MomentAdapter {
 
     private val adapter = object : SparkAdapter(), MomentAdapter {
 
-        private var data: List<ChartViewState.DataPoint> = emptyList()
+        private var data: List<ChartDataPoint> = emptyList()
 
-        override fun submitList(newData: List<ChartViewState.DataPoint>?) {
+        override fun submitList(newData: List<ChartDataPoint>?) {
             data = newData ?: emptyList()
             notifyDataSetChanged()
         }
@@ -34,7 +34,7 @@ internal class MomentChartAdapter internal constructor() : MomentAdapter {
             return getItem(index).y
         }
 
-        override fun getItem(index: Int): ChartViewState.DataPoint {
+        override fun getItem(index: Int): ChartDataPoint {
             return data[index]
         }
 
@@ -43,7 +43,7 @@ internal class MomentChartAdapter internal constructor() : MomentAdapter {
         }
     }
 
-    override fun submitList(newData: List<ChartViewState.DataPoint>?) {
+    override fun submitList(newData: List<ChartDataPoint>?) {
         adapter.submitList(newData)
     }
 
@@ -55,6 +55,6 @@ internal class MomentChartAdapter internal constructor() : MomentAdapter {
 
 internal interface MomentAdapter {
 
-    fun submitList(newData: List<ChartViewState.DataPoint>?)
+    fun submitList(newData: List<ChartDataPoint>?)
 
 }

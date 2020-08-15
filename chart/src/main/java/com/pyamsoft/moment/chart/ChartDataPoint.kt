@@ -16,14 +16,12 @@
 
 package com.pyamsoft.moment.chart
 
-import com.pyamsoft.pydroid.arch.UiControllerEvent
-import com.pyamsoft.pydroid.arch.UiViewEvent
-import com.pyamsoft.pydroid.arch.UiViewState
+import androidx.annotation.CheckResult
 
-data class ChartViewState(val dataPoints: List<ChartDataPoint>) : UiViewState {
+data class ChartDataPoint(val y: Float)
 
+@CheckResult
+fun Float.toChartData(): ChartDataPoint {
+    return ChartDataPoint(this)
 }
 
-sealed class ChartViewEvent : UiViewEvent
-
-sealed class ChartControllerEvent : UiControllerEvent

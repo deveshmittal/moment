@@ -20,6 +20,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import androidx.annotation.CheckResult
+import com.pyamsoft.moment.chart.ChartComponent
 import com.pyamsoft.moment.main.MainComponent
 import com.pyamsoft.pydroid.loader.ImageLoader
 import com.pyamsoft.pydroid.ui.theme.Theming
@@ -37,6 +38,9 @@ internal interface MomentComponent {
 
     @CheckResult
     fun plusMainComponent(): MainComponent.Factory
+
+    @CheckResult
+    fun plusChartComponent(): ChartComponent.Factory
 
     @Component.Factory
     interface Factory {
