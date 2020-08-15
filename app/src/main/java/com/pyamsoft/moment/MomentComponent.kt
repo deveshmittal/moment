@@ -44,11 +44,7 @@ internal interface MomentComponent {
         @CheckResult
         fun create(
             @BindsInstance application: Application,
-            @Named("debug") @BindsInstance debug: Boolean,
-            @BindsInstance moshi: Moshi,
-            @BindsInstance theming: Theming,
-            @BindsInstance imageLoader: ImageLoader,
-            @BindsInstance activityClass: Class<out Activity>
+            @Named("debug") @BindsInstance debug: Boolean
         ): MomentComponent
     }
 

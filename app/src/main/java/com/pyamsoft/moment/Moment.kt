@@ -40,16 +40,7 @@ class Moment : Application() {
             BuildConfig.VERSION_CODE
         )
         PYDroid.init(this, parameters) { provider ->
-            val moshi = Moshi.Builder()
-                .build()
-            component = DaggerMomentComponent.factory().create(
-                this,
-                isDebugMode(),
-                moshi,
-                provider.theming(),
-                provider.imageLoader(),
-                MainActivity::class.java
-            )
+            component = DaggerMomentComponent.factory().create(this, isDebugMode())
             onInitialized()
         }
     }
