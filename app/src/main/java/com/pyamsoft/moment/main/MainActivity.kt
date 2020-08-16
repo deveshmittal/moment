@@ -37,7 +37,6 @@ import com.pyamsoft.pydroid.ui.rating.buildChangeLog
 import com.pyamsoft.pydroid.ui.util.layout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : RatingActivity() {
@@ -101,8 +100,10 @@ class MainActivity : RatingActivity() {
         inflateComponents(binding.layoutConstraint, savedInstanceState)
 
         this.lifecycleScope.launch(context = Dispatchers.Default) {
-            requireNotNull(yfinance).getNasdaqCompositeIndex()?.also { compositeIndex ->
-                Timber.d("NASDAQ: $compositeIndex")
+            requireNotNull(yfinance).apply {
+                getNasdaqCompositeIndex()
+                getTickers(symbols = "MSFT,AAPL")
+                getChart(symbol = "MSFT", includePrePost = false, interval = "2m", range = "1d")
             }
         }
     }

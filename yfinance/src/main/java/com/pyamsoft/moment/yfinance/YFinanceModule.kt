@@ -17,7 +17,6 @@
 
 package com.pyamsoft.moment.yfinance
 
-import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.bootstrap.network.DelegatingSocketFactory
 import com.squareup.moshi.Moshi
 import dagger.Lazy
@@ -43,6 +42,8 @@ class YFinanceModule {
 
     @Module
     companion object {
+
+        private const val BASE_URL = "https://query1.finance.yahoo.com/"
 
         @Provides
         @JvmStatic
@@ -94,6 +95,7 @@ class YFinanceModule {
             @InternalApi converterFactory: Converter.Factory
         ): Retrofit {
             return Retrofit.Builder()
+                .baseUrl(BASE_URL)
                 .callFactory(callFactory)
                 .addConverterFactory(converterFactory)
                 .build()

@@ -21,8 +21,8 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-private const val QUOTE_BASE_URL = "https://query1.finance.yahoo.com/v7/finance/quote"
-private const val CHART_BASE_URL = "https://query1.finance.yahoo.com/v8/finance/chart"
+private const val QUOTE_BASE_URL = "v7/finance/quote"
+private const val CHART_BASE_URL = "v8/finance/chart"
 
 interface YFinance {
 
@@ -35,7 +35,7 @@ interface YFinance {
     suspend fun getTickers(@Query("symbols", encoded = true) symbols: String): YFResponse
 
     @CheckResult
-    @GET("${CHART_BASE_URL}{symbol}")
+    @GET("${CHART_BASE_URL}/{symbol}")
     suspend fun getChart(
         @Path("symbol", encoded = true) symbol: String,
         @Query("includePrePost", encoded = true) includePrePost: Boolean,
