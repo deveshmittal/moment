@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.yfinance
+package com.pyamsoft.moment.yfinance.model.quote
 
 import androidx.annotation.CheckResult
+import com.pyamsoft.moment.yfinance.model.ValidResponse
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -37,7 +38,11 @@ data class YFQuote internal constructor(
     @Json(name = "postMarketChange") internal val postChange: Float?,
     @Json(name = "trailingAnnualDividendRate") internal val annualDividendRate: Float?,
     @Json(name = "trailingAnnualDividendYield") internal val annualDividendYield: Float?
-) {
+) : ValidResponse {
+
+    override fun isValid(): Boolean {
+        return symbol != null
+    }
 
     @CheckResult
     fun symbol(): String {

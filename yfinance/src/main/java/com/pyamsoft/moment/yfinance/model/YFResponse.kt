@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.yfinance
+package com.pyamsoft.moment.yfinance.model
 
 import androidx.annotation.CheckResult
+import com.pyamsoft.moment.yfinance.model.chart.YFChartResponse
+import com.pyamsoft.moment.yfinance.model.quote.YFQuoteResponse
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class YFResponse internal constructor(
-    internal val quoteResponse: YFQuoteResponse?
+    internal val quoteResponse: YFQuoteResponse?,
+    internal val chartResponse: YFChartResponse?
 ) {
 
     @CheckResult
-    fun response(): YFQuoteResponse {
+    fun asQuote(): YFQuoteResponse {
         return quoteResponse ?: YFQuoteResponse.empty()
+    }
+
+    @CheckResult
+    fun asChart(): YFChartResponse {
+        return chartResponse ?: YFChartResponse.empty()
     }
 
     // Needed to generate static adapter

@@ -17,6 +17,7 @@
 package com.pyamsoft.moment.yfinance
 
 import androidx.annotation.CheckResult
+import com.pyamsoft.moment.yfinance.model.YFResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -41,6 +42,6 @@ interface YFinance {
         @Query("includePrePost", encoded = true) includePrePost: Boolean,
         @Query("interval", encoded = true) interval: String,
         @Query("range", encoded = true) range: String
-    )
+    ): YFResponse
 
 }

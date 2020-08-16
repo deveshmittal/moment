@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.yfinance
+package com.pyamsoft.moment.yfinance.model.quote
 
 import androidx.annotation.CheckResult
+import com.pyamsoft.moment.yfinance.model.ValidResponse
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class YFQuoteResponse internal constructor(
     internal val result: List<YFQuote>?
-) {
+) : ValidResponse {
+
+    override fun isValid(): Boolean {
+        return result != null
+    }
 
     @CheckResult
     fun quotes(): List<YFQuote> {
