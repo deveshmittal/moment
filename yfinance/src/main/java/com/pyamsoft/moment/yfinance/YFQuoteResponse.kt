@@ -17,16 +17,25 @@
 package com.pyamsoft.moment.yfinance
 
 import androidx.annotation.CheckResult
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.squareup.moshi.JsonClass
 
-interface YFinance {
-
-    @CheckResult
-    @GET("quote?format=json&symbols=^IXIC")
-    suspend fun getNasdaqCompositeIndex(): YFResponse
+@JsonClass(generateAdapter = true)
+data class YFQuoteResponse internal constructor(
+    internal val result: List<YFQuote>?
+) {
 
     @CheckResult
-    @GET("quote?format=json")
-    suspend fun getTickers(@Query("symbols", encoded = true) symbols: String): YFResponse
+    fun quotes(): List<YFQuote> {
+        return result ?: emptyList()
+    }
+
+    // Needed to generate static adapter
+    companion object {
+
+        @JvmStatic
+        @CheckResult
+        internal fun empty(): YFQuoteResponse {
+            return YFQuoteResponse(null)
+        }
+    }
 }
