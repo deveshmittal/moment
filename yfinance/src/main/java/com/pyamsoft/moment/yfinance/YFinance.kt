@@ -18,15 +18,29 @@ package com.pyamsoft.moment.yfinance
 
 import androidx.annotation.CheckResult
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
+
+private const val QUOTE_BASE_URL = "https://query1.finance.yahoo.com/v7/finance/quote"
+private const val CHART_BASE_URL = "https://query1.finance.yahoo.com/v8/finance/chart"
 
 interface YFinance {
 
     @CheckResult
-    @GET("quote?format=json&symbols=^IXIC")
+    @GET("${QUOTE_BASE_URL}?format=json&symbols=^IXIC")
     suspend fun getNasdaqCompositeIndex(): YFResponse
 
     @CheckResult
-    @GET("quote?format=json")
+    @GET("${QUOTE_BASE_URL}?format=json")
     suspend fun getTickers(@Query("symbols", encoded = true) symbols: String): YFResponse
+
+    @CheckResult
+    @GET("${CHART_BASE_URL}{symbol}")
+    suspend fun getChart(
+        @Path("symbol", encoded = true) symbol: String,
+        @Query("includePrePost", encoded = true) includePrePost: Boolean,
+        @Query("interval", encoded = true) interval: String,
+        @Query("range", encoded = true) range: String
+    )
+
 }

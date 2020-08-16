@@ -19,8 +19,8 @@ package com.pyamsoft.moment.yfinance
 
 import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.bootstrap.network.DelegatingSocketFactory
-import com.pyamsoft.pydroid.core.Enforcer
 import com.squareup.moshi.Moshi
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import okhttp3.Call
@@ -36,7 +36,7 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-private annotation class InternalScope
+private annotation class InternalApi
 
 @Module
 class YFinanceModule {
@@ -46,49 +46,54 @@ class YFinanceModule {
 
         @Provides
         @JvmStatic
-        @InternalScope
-        @CheckResult
-        fun provideMoshi(): Moshi {
+        @InternalApi
+        internal fun provideMoshi(): Moshi {
             return Moshi.Builder().build()
         }
 
         @Provides
         @JvmStatic
-        @InternalScope
-        @CheckResult
-        fun provideCallFactory(@Named("debug") debug: Boolean): Call.Factory {
-            return OkHttpClientLazyCallFactory {
-                OkHttpClient.Builder()
-                    .socketFactory(DelegatingSocketFactory.create())
-                    .also {
-                        if (debug) {
-                            val logging = HttpLoggingInterceptor()
-                            logging.level = HttpLoggingInterceptor.Level.BODY
-                            it.addInterceptor(logging)
-                        }
+        @InternalApi
+        internal fun provideOkHttpClient(@Named("debug") debug: Boolean): OkHttpClient {
+            return OkHttpClient.Builder()
+                .socketFactory(DelegatingSocketFactory.create())
+                .also {
+                    if (debug) {
+                        val logging = HttpLoggingInterceptor()
+                        logging.level = HttpLoggingInterceptor.Level.BODY
+                        it.addInterceptor(logging)
                     }
-                    .build()
+                }
+                .build()
+        }
+
+        @Provides
+        @JvmStatic
+        @InternalApi
+        internal fun provideCallFactory(@InternalApi client: Lazy<OkHttpClient>): Call.Factory {
+            return object : Call.Factory {
+
+                override fun newCall(request: Request): Call {
+                    return client.get().newCall(request)
+                }
             }
         }
 
         @Provides
         @JvmStatic
-        @InternalScope
-        @CheckResult
-        fun provideConverterFactory(@InternalScope moshi: Moshi): Converter.Factory {
+        @InternalApi
+        internal fun provideConverterFactory(@InternalApi moshi: Moshi): Converter.Factory {
             return MoshiConverterFactory.create(moshi)
         }
 
         @Provides
         @JvmStatic
-        @InternalScope
-        @CheckResult
-        fun createRetrofit(
-            @InternalScope callFactory: Call.Factory,
-            @InternalScope converterFactory: Converter.Factory
+        @InternalApi
+        internal fun createRetrofit(
+            @InternalApi callFactory: Call.Factory,
+            @InternalApi converterFactory: Converter.Factory
         ): Retrofit {
             return Retrofit.Builder()
-                .baseUrl("https://query1.finance.yahoo.com/v7/finance/")
                 .callFactory(callFactory)
                 .addConverterFactory(converterFactory)
                 .build()
@@ -97,21 +102,8 @@ class YFinanceModule {
         @Provides
         @JvmStatic
         @Singleton
-        @CheckResult
-        fun createYFinanceService(@InternalScope retrofit: Retrofit): YFinance {
+        fun createYFinanceService(@InternalApi retrofit: Retrofit): YFinance {
             return retrofit.create(YFinance::class.java)
-        }
-
-        private class OkHttpClientLazyCallFactory(
-            provider: () -> OkHttpClient
-        ) : Call.Factory {
-
-            private val client by lazy { provider() }
-
-            override fun newCall(request: Request): Call {
-                Enforcer.assertOffMainThread()
-                return client.newCall(request)
-            }
         }
     }
 }
