@@ -34,6 +34,9 @@ android {
 		vectorDrawables.useSupportLibrary = true
 
 		resConfigs "en"
+
+		// API key
+		buildConfigField "String", "MARKETSTACK_API_KEY", 'System.getenv("MARKETSTACK_API_KEY")'
 	}
 
 	compileOptions {
