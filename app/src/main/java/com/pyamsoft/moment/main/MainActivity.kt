@@ -21,11 +21,9 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.pyamsoft.moment.BuildConfig
 import com.pyamsoft.moment.MomentComponent
 import com.pyamsoft.moment.R
-import com.pyamsoft.moment.yfinance.YFinance
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
@@ -35,8 +33,6 @@ import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
 import com.pyamsoft.pydroid.ui.util.layout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : RatingActivity() {
@@ -70,10 +66,6 @@ class MainActivity : RatingActivity() {
 
     @JvmField
     @Inject
-    internal var yfinance: YFinance? = null
-
-    @JvmField
-    @Inject
     internal var container: MainContainer? = null
 
     @JvmField
@@ -98,14 +90,6 @@ class MainActivity : RatingActivity() {
             .inject(this)
 
         inflateComponents(binding.layoutConstraint, savedInstanceState)
-
-        this.lifecycleScope.launch(context = Dispatchers.Default) {
-            requireNotNull(yfinance).apply {
-                getNasdaqCompositeIndex()
-                getTickers(symbols = "MSFT,AAPL")
-                getChart(symbol = "MSFT", includePrePost = false, interval = "2m", range = "1d")
-            }
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

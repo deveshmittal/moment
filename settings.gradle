@@ -1,4 +1,3 @@
-include ':yfinance'
 include ':chart'
 include ':main'
 include ':core'

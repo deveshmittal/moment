@@ -21,7 +21,6 @@ import android.content.Context
 import androidx.annotation.CheckResult
 import com.pyamsoft.moment.chart.ChartComponent
 import com.pyamsoft.moment.main.MainComponent
-import com.pyamsoft.moment.yfinance.YFinanceModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -30,7 +29,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [MomentComponent.MomentProvider::class, YFinanceModule::class])
+@Component(modules = [MomentComponent.MomentProvider::class])
 internal interface MomentComponent {
 
     @CheckResult

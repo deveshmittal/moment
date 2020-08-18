@@ -16,14 +16,12 @@
 
 package com.pyamsoft.moment.chart
 
-import android.app.Activity
 import android.view.ViewGroup
 import androidx.annotation.CheckResult
 import androidx.lifecycle.ViewModelProvider
 import com.pyamsoft.moment.ThemeProviderModule
 import com.pyamsoft.moment.core.MomentViewModelFactory
 import com.pyamsoft.pydroid.arch.UiViewModel
-import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module

@@ -36,7 +36,7 @@ android {
 		resConfigs "en"
 
 		// API key
-		buildConfigField "String", "MARKETSTACK_API_KEY", 'System.getenv("MARKETSTACK_API_KEY")'
+		buildConfigField "String", "TIINGO_API_KEY", 'System.getenv("TIINGO_API_KEY")'
 	}
 
 	compileOptions {
@@ -114,5 +114,4 @@ dependencies {
 
 	implementation project(":chart")
 	implementation project(":main")
-	implementation project(":yfinance")
 }
