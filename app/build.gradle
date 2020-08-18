@@ -34,9 +34,6 @@ android {
 		vectorDrawables.useSupportLibrary = true
 
 		resConfigs "en"
-
-		// API key
-		buildConfigField "String", "TIINGO_API_KEY", 'System.getenv("TIINGO_API_KEY")'
 	}
 
 	compileOptions {
