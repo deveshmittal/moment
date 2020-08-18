@@ -30,15 +30,15 @@ internal interface TiingoService {
     @CheckResult
     @GET("iex/{symbol}")
     @Headers("Content-Type: application/json")
-    suspend fun quote(@Header("Authentication") token: String, @Path("{symbol}") symbol: String): Any
+    suspend fun quote(@Path("symbol") symbol: String, @Header("Authorization") token: String): Any
 
     @CheckResult
     @GET("tiingo/daily/{symbol}/prices")
     @Headers("Content-Type: application/json")
-    suspend fun eod(@Header("Authentication") token: String, @Path("{symbol}") symbol: String): Any
+    suspend fun eod(@Path("symbol") symbol: String, @Header("Authorization") token: String): Any
 
     @CheckResult
     @GET("tiingo/daily/{symbol}")
     @Headers("Content-Type: application/json")
-    suspend fun info(@Header("Authentication") token: String, @Path("{symbol}") symbol: String): Any
+    suspend fun info(@Path("symbol") symbol: String, @Header("Authorization") token: String): Any
 }

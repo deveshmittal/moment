@@ -31,21 +31,26 @@ class Tiingo @Inject internal constructor(
 ) {
 
     @CheckResult
+    private suspend fun getAccessToken(): String {
+        return "Token ${auth.getApiToken()}"
+    }
+
+    @CheckResult
     suspend fun quote(symbol: String): Any {
         Enforcer.assertOffMainThread()
-        return service.quote(auth.getApiToken(), symbol)
+        return service.quote(token = getAccessToken(), symbol = symbol)
     }
 
     @CheckResult
     suspend fun eod(symbol: String): Any {
         Enforcer.assertOffMainThread()
-        return service.eod(auth.getApiToken(), symbol)
+        return service.eod(token = getAccessToken(), symbol = symbol)
     }
 
     @CheckResult
     suspend fun info(symbol: String): Any {
         Enforcer.assertOffMainThread()
-        return service.info(auth.getApiToken(), symbol)
+        return service.info(token = getAccessToken(), symbol = symbol)
     }
 
 }

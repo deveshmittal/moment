@@ -21,9 +21,11 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.pyamsoft.moment.BuildConfig
 import com.pyamsoft.moment.MomentComponent
 import com.pyamsoft.moment.R
+import com.pyamsoft.moment.tiingo.Tiingo
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
@@ -33,6 +35,8 @@ import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
 import com.pyamsoft.pydroid.ui.util.layout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : RatingActivity() {
@@ -77,6 +81,10 @@ class MainActivity : RatingActivity() {
     internal var factory: ViewModelProvider.Factory? = null
     private val viewModel by viewModelFactory<MainViewModel> { factory }
 
+    @JvmField
+    @Inject
+    internal var tiingo: Tiingo? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Moment_Normal)
         super.onCreate(savedInstanceState)
@@ -90,6 +98,14 @@ class MainActivity : RatingActivity() {
             .inject(this)
 
         inflateComponents(binding.layoutConstraint, savedInstanceState)
+
+        lifecycleScope.launch(context = Dispatchers.Default) {
+            requireNotNull(tiingo).apply {
+                quote("MSFT")
+                eod("MSFT")
+                info("MSFT")
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
