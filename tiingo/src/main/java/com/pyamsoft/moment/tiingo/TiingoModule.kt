@@ -17,6 +17,8 @@
 
 package com.pyamsoft.moment.tiingo
 
+import android.content.Context
+import com.pyamsoft.cachify.Cached
 import com.pyamsoft.pydroid.bootstrap.network.DelegatingSocketFactory
 import com.squareup.moshi.Moshi
 import dagger.Lazy
@@ -35,15 +37,25 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-private annotation class InternalApi
+internal annotation class InternalApi
 
 @Module
-class TiingoModule {
+abstract class TiingoModule {
 
     @Module
     companion object {
 
         private const val BASE_URL = "https://api.tiingo.com/"
+
+        // For some reason we can't @Bind this, why not?
+        // complains that @Binds method paramter type must be assignable to return typ
+        // but obviously it is.
+        @Provides
+        @JvmStatic
+        @InternalApi
+        internal fun provideCache(context: Context, service: TiingoService): Cached<List<String>> {
+            return TiingoTickerCache(context, service)
+        }
 
         @Provides
         @JvmStatic

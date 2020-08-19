@@ -17,15 +17,18 @@
 package com.pyamsoft.moment.tiingo
 
 import androidx.annotation.CheckResult
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.Path
+import okhttp3.ResponseBody
+import retrofit2.http.*
 
 /**
  * These functions closely mirror those in Tiingo with an additional header parameter
  */
 internal interface TiingoService {
+
+    @CheckResult
+    @GET("https://apimedia.tiingo.com/docs/tiingo/daily/supported_tickers.zip")
+    @Streaming
+    suspend fun tickers(): ResponseBody
 
     @CheckResult
     @GET("iex/{symbol}")

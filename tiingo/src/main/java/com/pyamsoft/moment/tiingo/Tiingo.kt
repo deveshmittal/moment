@@ -17,6 +17,7 @@
 package com.pyamsoft.moment.tiingo
 
 import androidx.annotation.CheckResult
+import com.pyamsoft.cachify.Cached
 import com.pyamsoft.pydroid.core.Enforcer
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,6 +27,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class Tiingo @Inject internal constructor(
+    @InternalApi private val cache: Cached<List<String>>,
     private val service: TiingoService,
     private val auth: TiingoAuth
 ) {
@@ -33,6 +35,12 @@ class Tiingo @Inject internal constructor(
     @CheckResult
     private suspend fun getAccessToken(): String {
         return "Token ${auth.getApiToken()}"
+    }
+
+
+    @CheckResult
+    suspend fun tickers(): List<String> {
+        return cache.call()
     }
 
     @CheckResult
@@ -51,6 +59,11 @@ class Tiingo @Inject internal constructor(
     suspend fun info(symbol: String): Any {
         Enforcer.assertOffMainThread()
         return service.info(token = getAccessToken(), symbol = symbol)
+    }
+
+    companion object {
+        private const val TICKERS_FILE = "tiingo_tickers.csv"
+        private const val TIINGO_ZIP_ENTRY = "supported_tickers.csv"
     }
 
 }

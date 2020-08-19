@@ -37,6 +37,7 @@ import com.pyamsoft.pydroid.ui.rating.buildChangeLog
 import com.pyamsoft.pydroid.ui.util.layout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : RatingActivity() {
@@ -101,9 +102,10 @@ class MainActivity : RatingActivity() {
 
         lifecycleScope.launch(context = Dispatchers.Default) {
             requireNotNull(tiingo).apply {
-                quote("MSFT")
-                eod("MSFT")
-                info("MSFT")
+//                tickers()
+//                quote("MSFT")
+//                eod("MSFT")
+//                info("MSFT")
             }
         }
     }
