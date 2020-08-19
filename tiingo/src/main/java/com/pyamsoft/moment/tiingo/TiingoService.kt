@@ -25,6 +25,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.Streaming
 
 /**
@@ -50,6 +51,7 @@ internal interface TiingoService {
     @Headers("Content-Type: application/json")
     suspend fun eod(
         @Path("symbol") symbol: String,
+        @Query("startDate") startDate: String?,
         @Header("Authorization") token: String
     ): List<TiingoEodPrice>
 

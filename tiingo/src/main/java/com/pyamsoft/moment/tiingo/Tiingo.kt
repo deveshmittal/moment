@@ -19,6 +19,7 @@ package com.pyamsoft.moment.tiingo
 import androidx.annotation.CheckResult
 import com.pyamsoft.cachify.Cached
 import com.pyamsoft.moment.finance.FinanceSource
+import com.pyamsoft.moment.finance.model.Finances
 import com.pyamsoft.moment.finance.model.Meta
 import com.pyamsoft.moment.finance.model.Price
 import com.pyamsoft.moment.finance.model.Quote
@@ -30,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -61,9 +63,14 @@ internal class Tiingo @Inject internal constructor(
         )
     }
 
+    @CheckResult
+    override suspend fun quotes(vararg symbols: String): List<Quote> {
+        return batch(symbols) { quote(it) }
+    }
+
     override suspend fun price(symbol: String): Price {
         Enforcer.assertOffMainThread()
-        val price = service.eod(token = getAccessToken(), symbol = symbol).first()
+        val price = service.eod(token = getAccessToken(), symbol = symbol, startDate = null).first()
         return Price(
             symbol = symbol,
             close = price.adjClose,
@@ -73,6 +80,11 @@ internal class Tiingo @Inject internal constructor(
             open = price.adjOpen,
             volume = price.adjVolume
         )
+    }
+
+    @CheckResult
+    override suspend fun prices(vararg symbols: String): List<Price> {
+        return batch(symbols) { price(it) }
     }
 
     override suspend fun meta(symbol: String): Meta {
@@ -88,20 +100,45 @@ internal class Tiingo @Inject internal constructor(
         )
     }
 
-
-    @CheckResult
-    override suspend fun quotes(vararg symbols: String): List<Quote> {
-        return batch(symbols) { quote(it) }
-    }
-
-    @CheckResult
-    override suspend fun prices(vararg symbols: String): List<Price> {
-        return batch(symbols) { price(it) }
-    }
-
     @CheckResult
     override suspend fun metas(vararg symbols: String): List<Meta> {
         return batch(symbols) { meta(it) }
+    }
+
+    /**
+     * Takes a date
+     */
+    @CheckResult
+    private fun rangeToString(time: Int, unit: FinanceSource.DateRange.RangeUnit): String {
+        val today = Calendar.getInstance()
+        val amount = when (unit) {
+            FinanceSource.DateRange.RangeUnit.DAYS -> Calendar.DAY_OF_MONTH
+            FinanceSource.DateRange.RangeUnit.MONTHS -> Calendar.MONTH
+            FinanceSource.DateRange.RangeUnit.YEARS -> Calendar.YEAR
+        }
+
+        // Subtract the amount to get a start date in the past
+        today.add(amount, -time)
+
+        // Tiingo expects YYYY-MM-DD
+        return Finances.formatInfoDate(today.time)
+    }
+
+    override suspend fun history(symbol: String, range: FinanceSource.DateRange): List<Price> {
+        Enforcer.assertOffMainThread()
+        val startDate = rangeToString(range.time, range.unit)
+        val prices = service.eod(token = getAccessToken(), symbol = symbol, startDate = startDate)
+        return prices.map { price ->
+            Price(
+                symbol = symbol,
+                close = price.adjClose,
+                date = price.date,
+                high = price.adjHigh,
+                low = price.adjLow,
+                open = price.adjOpen,
+                volume = price.adjVolume
+            )
+        }
     }
 
     companion object {
@@ -112,6 +149,7 @@ internal class Tiingo @Inject internal constructor(
             symbols: Array<out String>,
             crossinline call: suspend CoroutineScope.(String) -> T
         ): List<T> {
+            Enforcer.assertOffMainThread()
             val jobs = mutableListOf<Deferred<T>>()
 
             // Queue up each symbol lookup job

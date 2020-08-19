@@ -24,34 +24,40 @@ import java.util.Date
 
 object Finances {
 
-    private val tradeDateFormatter = object : ThreadLocal<SimpleDateFormat>() {
+    @CheckResult
+    private inline fun <T : Any> threadLocal(crossinline block: () -> T): ThreadLocal<T> {
+        return object : ThreadLocal<T>() {
 
-        @SuppressLint("SimpleDateFormat")
-        override fun initialValue(): SimpleDateFormat? {
-            return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
+            override fun initialValue(): T? {
+                return block()
+            }
+
         }
 
     }
 
-    private val infoDateFormatter = object : ThreadLocal<SimpleDateFormat>() {
+    @SuppressLint("SimpleDateFormat")
+    private val tradeFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX") }
 
-        @SuppressLint("SimpleDateFormat")
-        override fun initialValue(): SimpleDateFormat? {
-            return SimpleDateFormat("yyyy-MM-dd")
-        }
+    @SuppressLint("SimpleDateFormat")
+    private val infoFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd") }
 
+    @JvmStatic
+    @CheckResult
+    fun parseTradeDate(date: String): Date {
+        return requireNotNull(tradeFormatter.get()).parse(date) ?: INVALID_TIME
     }
 
     @JvmStatic
     @CheckResult
-    internal fun parseTradeDate(date: String): Date {
-        return requireNotNull(tradeDateFormatter.get()).parse(date) ?: INVALID_TIME
+    fun parseInfoDate(date: String): Date {
+        return requireNotNull(infoFormatter.get()).parse(date) ?: INVALID_TIME
     }
 
     @JvmStatic
     @CheckResult
-    internal fun parseInfoDate(date: String): Date {
-        return requireNotNull(infoDateFormatter.get()).parse(date) ?: INVALID_TIME
+    fun formatInfoDate(date: Date): String {
+        return requireNotNull(infoFormatter.get()).format(date).orEmpty()
     }
 
     @JvmField

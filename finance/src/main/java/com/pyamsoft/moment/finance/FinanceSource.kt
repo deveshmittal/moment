@@ -44,4 +44,16 @@ interface FinanceSource {
 
     @CheckResult
     suspend fun metas(vararg symbols: String): List<Meta>
+
+    @CheckResult
+    suspend fun history(symbol: String, range: DateRange): List<Price>
+
+    data class DateRange(val time: Int, val unit: RangeUnit) {
+
+        enum class RangeUnit {
+            DAYS,
+            MONTHS,
+            YEARS
+        }
+    }
 }
