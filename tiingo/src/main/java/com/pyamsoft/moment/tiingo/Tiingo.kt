@@ -18,6 +18,11 @@ package com.pyamsoft.moment.tiingo
 
 import androidx.annotation.CheckResult
 import com.pyamsoft.cachify.Cached
+import com.pyamsoft.moment.finance.FinanceSource
+import com.pyamsoft.moment.finance.model.EodPrice
+import com.pyamsoft.moment.finance.model.Quote
+import com.pyamsoft.moment.finance.model.Ticker
+import com.pyamsoft.moment.finance.model.TickerInfo
 import com.pyamsoft.pydroid.core.Enforcer
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,39 +31,58 @@ import javax.inject.Singleton
  * These functions closely mirror those in TiingoService without the header parameter
  */
 @Singleton
-class Tiingo @Inject internal constructor(
+internal class Tiingo @Inject internal constructor(
     @InternalApi private val cache: Cached<List<String>>,
     private val service: TiingoService,
     private val auth: TiingoAuth
-) {
+) : FinanceSource {
 
     @CheckResult
     private suspend fun getAccessToken(): String {
         return "Token ${auth.getApiToken()}"
     }
 
-
-    @CheckResult
-    suspend fun tickers(): List<String> {
-        return cache.call()
+    override suspend fun tickers(): List<Ticker> {
+        val strings = cache.call()
+        return strings.map { Ticker(it) }
     }
 
-    @CheckResult
-    suspend fun quote(symbol: String): Any {
+    override suspend fun quote(symbol: String): Quote {
         Enforcer.assertOffMainThread()
-        return service.quote(token = getAccessToken(), symbol = symbol)
+        val quote = service.quote(token = getAccessToken(), symbol = symbol).first()
+        return Quote(
+            symbol = quote.ticker,
+            lastTrade = quote.lastSaleTimestamp,
+            price = quote.last,
+            previousClose = quote.prevClose
+        )
     }
 
-    @CheckResult
-    suspend fun eod(symbol: String): Any {
+    override suspend fun eod(symbol: String): EodPrice {
         Enforcer.assertOffMainThread()
-        return service.eod(token = getAccessToken(), symbol = symbol)
+        val price = service.eod(token = getAccessToken(), symbol = symbol).first()
+        return EodPrice(
+            symbol = symbol,
+            close = price.adjClose,
+            date = price.date,
+            high = price.adjHigh,
+            low = price.adjLow,
+            open = price.adjOpen,
+            volume = price.adjVolume
+        )
     }
 
-    @CheckResult
-    suspend fun info(symbol: String): Any {
+    override suspend fun info(symbol: String): TickerInfo {
         Enforcer.assertOffMainThread()
-        return service.info(token = getAccessToken(), symbol = symbol)
+        val info = service.info(token = getAccessToken(), symbol = symbol)
+        return TickerInfo(
+            symbol = info.ticker,
+            name = info.name,
+            exchange = info.exchangeCode,
+            description = info.description,
+            startDate = info.startDate,
+            endDate = info.endDate
+        )
     }
 
 }

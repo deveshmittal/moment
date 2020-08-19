@@ -25,7 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import com.pyamsoft.moment.BuildConfig
 import com.pyamsoft.moment.MomentComponent
 import com.pyamsoft.moment.R
-import com.pyamsoft.moment.tiingo.Tiingo
+import com.pyamsoft.moment.finance.FinanceSource
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
@@ -84,7 +84,7 @@ class MainActivity : RatingActivity() {
 
     @JvmField
     @Inject
-    internal var tiingo: Tiingo? = null
+    internal var financeSource: FinanceSource? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Moment_Normal)
@@ -101,11 +101,10 @@ class MainActivity : RatingActivity() {
         inflateComponents(binding.layoutConstraint, savedInstanceState)
 
         lifecycleScope.launch(context = Dispatchers.Default) {
-            requireNotNull(tiingo).apply {
-//                tickers()
-//                quote("MSFT")
-//                eod("MSFT")
-//                info("MSFT")
+            requireNotNull(financeSource).apply {
+                Timber.d("Quote: ${quote("MSFT")}")
+                Timber.d("EOD: ${eod("MSFT")}")
+                Timber.d("Info: ${info("MSFT")}")
             }
         }
     }

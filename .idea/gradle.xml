@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/chart" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/finance" />
             <option value="$PROJECT_DIR$/main" />
             <option value="$PROJECT_DIR$/tiingo" />
           </set>

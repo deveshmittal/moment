@@ -19,8 +19,10 @@ package com.pyamsoft.moment.tiingo
 
 import android.content.Context
 import com.pyamsoft.cachify.Cached
+import com.pyamsoft.moment.finance.FinanceSource
 import com.pyamsoft.pydroid.bootstrap.network.DelegatingSocketFactory
 import com.squareup.moshi.Moshi
+import dagger.Binds
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -41,6 +43,9 @@ internal annotation class InternalApi
 
 @Module
 abstract class TiingoModule {
+
+    @Binds
+    internal abstract fun bindFinanceSource(impl: Tiingo): FinanceSource
 
     @Module
     companion object {

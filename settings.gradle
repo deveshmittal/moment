@@ -1,3 +1,4 @@
+include ':finance'
 include ':tiingo'
 include ':chart'
 include ':main'
