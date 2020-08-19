@@ -61,9 +61,4 @@ class Tiingo @Inject internal constructor(
         return service.info(token = getAccessToken(), symbol = symbol)
     }
 
-    companion object {
-        private const val TICKERS_FILE = "tiingo_tickers.csv"
-        private const val TIINGO_ZIP_ENTRY = "supported_tickers.csv"
-    }
-
 }
