@@ -18,10 +18,10 @@ package com.pyamsoft.moment.finance.model
 
 import androidx.annotation.CheckResult
 
-data class Ticker(val symbol: String) {
+data class Ticker(internal val symbol: String) {
 
     @CheckResult
-    fun symbol(): String {
+    fun ticker(): String {
         return symbol
     }
 }

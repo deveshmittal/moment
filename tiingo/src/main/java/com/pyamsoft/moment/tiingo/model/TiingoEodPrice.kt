@@ -19,7 +19,7 @@ package com.pyamsoft.moment.tiingo.model
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class TiingoEodPrice internal constructor(
+internal data class TiingoEodPrice internal constructor(
     internal val date: String?,
     internal val adjHigh: Float?,
     internal val adjLow: Float?,

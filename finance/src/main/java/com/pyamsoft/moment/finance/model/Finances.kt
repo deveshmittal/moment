@@ -44,13 +44,13 @@ object Finances {
 
     @JvmStatic
     @CheckResult
-    fun parseTradeDate(date: String): Date {
+    internal fun parseTradeDate(date: String): Date {
         return requireNotNull(tradeDateFormatter.get()).parse(date) ?: INVALID_TIME
     }
 
     @JvmStatic
     @CheckResult
-    fun parseInfoDate(date: String): Date {
+    internal fun parseInfoDate(date: String): Date {
         return requireNotNull(infoDateFormatter.get()).parse(date) ?: INVALID_TIME
     }
 

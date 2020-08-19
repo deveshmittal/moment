@@ -84,7 +84,7 @@ class MainActivity : RatingActivity() {
 
     @JvmField
     @Inject
-    internal var financeSource: FinanceSource? = null
+    internal var finance: FinanceSource? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Moment_Normal)
@@ -101,10 +101,10 @@ class MainActivity : RatingActivity() {
         inflateComponents(binding.layoutConstraint, savedInstanceState)
 
         lifecycleScope.launch(context = Dispatchers.Default) {
-            requireNotNull(financeSource).apply {
-                Timber.d("Quote: ${quote("MSFT")}")
-                Timber.d("EOD: ${eod("MSFT")}")
-                Timber.d("Info: ${info("MSFT")}")
+            requireNotNull(finance).apply {
+                Timber.d("Quote: ${quotes("MSFT", "AAPL")}")
+                Timber.d("EOD: ${prices("MSFT", "AAPL")}")
+                Timber.d("Info: ${metas("MSFT", "AAPL")}")
             }
         }
     }

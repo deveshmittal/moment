@@ -17,10 +17,10 @@
 package com.pyamsoft.moment.finance
 
 import androidx.annotation.CheckResult
-import com.pyamsoft.moment.finance.model.EodPrice
+import com.pyamsoft.moment.finance.model.Meta
+import com.pyamsoft.moment.finance.model.Price
 import com.pyamsoft.moment.finance.model.Quote
 import com.pyamsoft.moment.finance.model.Ticker
-import com.pyamsoft.moment.finance.model.TickerInfo
 
 interface FinanceSource {
 
@@ -31,9 +31,17 @@ interface FinanceSource {
     suspend fun quote(symbol: String): Quote
 
     @CheckResult
-    suspend fun eod(symbol: String): EodPrice
+    suspend fun quotes(vararg symbols: String): List<Quote>
 
     @CheckResult
-    suspend fun info(symbol: String): TickerInfo
+    suspend fun price(symbol: String): Price
 
+    @CheckResult
+    suspend fun prices(vararg symbols: String): List<Price>
+
+    @CheckResult
+    suspend fun meta(symbol: String): Meta
+
+    @CheckResult
+    suspend fun metas(vararg symbols: String): List<Meta>
 }

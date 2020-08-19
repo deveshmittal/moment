@@ -26,7 +26,6 @@ data class Quote(
     internal val previousClose: Float?
 ) {
 
-    private val ticker = Ticker(symbol.orEmpty())
     private val lastTradeDate: Date
 
     init {
@@ -36,8 +35,8 @@ data class Quote(
     }
 
     @CheckResult
-    fun ticker(): Ticker {
-        return ticker
+    fun ticker(): String {
+        return symbol.orEmpty()
     }
 
     @CheckResult

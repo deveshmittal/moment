@@ -19,7 +19,7 @@ package com.pyamsoft.moment.tiingo.model
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class TiingoQuote internal constructor(
+internal data class TiingoQuote internal constructor(
     internal val ticker: String?,
     internal val lastSaleTimestamp: String?,
     internal val last: Float?,

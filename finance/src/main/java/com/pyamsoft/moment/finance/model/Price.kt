@@ -19,7 +19,7 @@ package com.pyamsoft.moment.finance.model
 import androidx.annotation.CheckResult
 import java.util.Date
 
-data class EodPrice(
+data class Price(
     internal val symbol: String?,
     internal val date: String?,
     internal val high: Float?,
@@ -29,7 +29,6 @@ data class EodPrice(
     internal val volume: Long?
 ) {
 
-    private val ticker = Ticker(symbol.orEmpty())
     private val tradeDate: Date
 
     init {
@@ -39,8 +38,8 @@ data class EodPrice(
     }
 
     @CheckResult
-    fun ticker(): Ticker {
-        return ticker
+    fun ticker(): String {
+        return symbol.orEmpty()
     }
 
     @CheckResult

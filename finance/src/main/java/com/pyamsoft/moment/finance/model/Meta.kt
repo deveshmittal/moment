@@ -19,7 +19,7 @@ package com.pyamsoft.moment.finance.model
 import androidx.annotation.CheckResult
 import java.util.Date
 
-data class TickerInfo(
+data class Meta(
     internal val symbol: String?,
     internal val name: String?,
     internal val exchange: String?,
@@ -28,7 +28,6 @@ data class TickerInfo(
     internal val endDate: String?
 ) {
 
-    private val ticker = Ticker(symbol.orEmpty())
     private val companyStartDate: Date
     private val companyEndDate: Date
 
@@ -43,8 +42,8 @@ data class TickerInfo(
     }
 
     @CheckResult
-    fun ticker(): Ticker {
-        return ticker
+    fun ticker(): String {
+        return symbol.orEmpty()
     }
 
     @CheckResult
