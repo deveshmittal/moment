@@ -95,7 +95,7 @@ class MainActivity : RatingActivity() {
             .inject(this)
 
         inflateComponents(binding.layoutConstraint, savedInstanceState)
-        pushFragment(ChartFragment.newInstance("MSFT".toSymbol()), ChartFragment.TAG)
+        pushFragment(ChartFragment.newInstance("AAPL".toSymbol()), ChartFragment.TAG)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
