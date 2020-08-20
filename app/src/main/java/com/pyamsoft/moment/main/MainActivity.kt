@@ -20,12 +20,13 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.pyamsoft.moment.BuildConfig
 import com.pyamsoft.moment.MomentComponent
 import com.pyamsoft.moment.R
-import com.pyamsoft.moment.finance.FinanceSource
+import com.pyamsoft.moment.chart.ChartFragment
+import com.pyamsoft.moment.finance.model.toSymbol
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
@@ -34,9 +35,8 @@ import com.pyamsoft.pydroid.ui.databinding.LayoutConstraintBinding
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
+import com.pyamsoft.pydroid.ui.util.commitNow
 import com.pyamsoft.pydroid.ui.util.layout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -82,10 +82,6 @@ class MainActivity : RatingActivity() {
     internal var factory: ViewModelProvider.Factory? = null
     private val viewModel by viewModelFactory<MainViewModel> { factory }
 
-    @JvmField
-    @Inject
-    internal var finance: FinanceSource? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Moment_Normal)
         super.onCreate(savedInstanceState)
@@ -99,14 +95,7 @@ class MainActivity : RatingActivity() {
             .inject(this)
 
         inflateComponents(binding.layoutConstraint, savedInstanceState)
-
-        lifecycleScope.launch(context = Dispatchers.Default) {
-            requireNotNull(finance).apply {
-                Timber.d("Quote: ${quotes("MSFT", "AAPL")}")
-                Timber.d("EOD: ${prices("MSFT", "AAPL")}")
-                Timber.d("Info: ${metas("MSFT", "AAPL")}")
-            }
-        }
+        pushFragment(ChartFragment.newInstance("MSFT".toSymbol()), ChartFragment.TAG)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -121,6 +110,28 @@ class MainActivity : RatingActivity() {
         container = null
         snackbar = null
         factory = null
+    }
+
+    private fun pushFragment(fragment: Fragment, tag: String, forcePush: Boolean = false) {
+        val fm = supportFragmentManager
+        val container = fragmentContainerId
+
+        val push = when {
+            fm.findFragmentById(container) == null -> true
+            else -> false
+        }
+
+        if (push || forcePush) {
+            if (forcePush) {
+                Timber.d("Force commit fragment: $tag")
+            } else {
+                Timber.d("Commit fragment: $tag")
+            }
+            fm.commitNow(this) {
+                replace(container, fragment, tag)
+            }
+        }
+
     }
 
     private fun inflateComponents(

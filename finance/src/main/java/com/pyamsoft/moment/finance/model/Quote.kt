@@ -20,23 +20,24 @@ import androidx.annotation.CheckResult
 import java.util.Date
 
 data class Quote(
-    internal val symbol: String?,
+    internal val ticker: String?,
     internal val lastTrade: String?,
     internal val price: Float?,
     internal val previousClose: Float?
 ) {
 
+    private val symbol = Symbol(ticker)
     private val lastTradeDate: Date
 
     init {
         lastTradeDate = lastTrade.let { trade ->
-            if (trade == null) Finances.INVALID_TIME else Finances.parseTradeDate(trade)
+            if (trade == null) Finances.INVALID_TIME else Finances.parseIexDate(trade)
         }
     }
 
     @CheckResult
-    fun ticker(): String {
-        return symbol.orEmpty()
+    fun symbol(): Symbol {
+        return symbol
     }
 
     @CheckResult

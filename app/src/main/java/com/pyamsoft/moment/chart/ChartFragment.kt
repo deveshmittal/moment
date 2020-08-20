@@ -17,24 +17,21 @@
 package com.pyamsoft.moment.chart
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.annotation.CheckResult
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.getSystemService
-import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import com.pyamsoft.moment.MomentComponent
 import com.pyamsoft.moment.core.MomentViewModelFactory
-import com.pyamsoft.moment.main.MainContainer
+import com.pyamsoft.moment.finance.model.Symbol
+import com.pyamsoft.moment.finance.model.toSymbol
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
@@ -67,10 +64,11 @@ class ChartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val symbol = requireArguments().getString(KEY_SYMBOL).toSymbol()
         val binding = LayoutConstraintBinding.bind(view)
         Injector.obtain<MomentComponent>(view.context.applicationContext)
             .plusChartComponent()
-            .create(binding.layoutConstraint)
+            .create(binding.layoutConstraint, symbol)
             .inject(this)
 
         val chart = requireNotNull(chart)
@@ -130,6 +128,23 @@ class ChartFragment : Fragment() {
 
         factory = null
         chart = null
+    }
+
+    companion object {
+
+        const val TAG = "ChartFragment"
+
+        private const val KEY_SYMBOL = "key_symbol"
+
+        @JvmStatic
+        @CheckResult
+        fun newInstance(symbol: Symbol): Fragment {
+            return ChartFragment().apply {
+                arguments = Bundle().apply {
+                    putString(KEY_SYMBOL, symbol.symbol())
+                }
+            }
+        }
     }
 
 }

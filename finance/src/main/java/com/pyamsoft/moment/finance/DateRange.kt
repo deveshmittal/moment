@@ -14,16 +14,30 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.finance.model
+package com.pyamsoft.moment.finance
 
 import androidx.annotation.CheckResult
 
-data class Ticker(internal val ticker: String) {
+data class DateRange(val time: Int, val unit: RangeUnit) {
 
-    private val symbol = Symbol(ticker)
-
-    @CheckResult
-    fun symbol(): Symbol {
-        return symbol
+    enum class RangeUnit {
+        DAYS,
+        MONTHS,
+        YEARS
     }
+}
+
+@CheckResult
+fun Int.toDayRange(): DateRange {
+    return DateRange(this, DateRange.RangeUnit.DAYS)
+}
+
+@CheckResult
+fun Int.toMonthRange(): DateRange {
+    return DateRange(this, DateRange.RangeUnit.MONTHS)
+}
+
+@CheckResult
+fun Int.toYearRange(): DateRange {
+    return DateRange(this, DateRange.RangeUnit.YEARS)
 }

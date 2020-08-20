@@ -16,13 +16,17 @@
 
 package com.pyamsoft.moment.chart
 
+import com.pyamsoft.moment.finance.DateRange
+import com.pyamsoft.moment.finance.model.Symbol
 import com.pyamsoft.pydroid.arch.UiControllerEvent
 import com.pyamsoft.pydroid.arch.UiViewEvent
 import com.pyamsoft.pydroid.arch.UiViewState
 
-data class ChartViewState(val dataPoints: List<ChartDataPoint>) : UiViewState {
-
-}
+data class ChartViewState(
+    val symbol: Symbol,
+    val range: DateRange,
+    val dataPoints: List<ChartDataPoint>
+) : UiViewState
 
 sealed class ChartViewEvent : UiViewEvent
 

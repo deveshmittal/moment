@@ -20,7 +20,7 @@ import androidx.annotation.CheckResult
 import java.util.Date
 
 data class Meta(
-    internal val symbol: String?,
+    internal val ticker: String?,
     internal val name: String?,
     internal val exchange: String?,
     internal val description: String?,
@@ -28,6 +28,7 @@ data class Meta(
     internal val endDate: String?
 ) {
 
+    private val symbol = Symbol(ticker)
     private val companyStartDate: Date
     private val companyEndDate: Date
 
@@ -42,8 +43,8 @@ data class Meta(
     }
 
     @CheckResult
-    fun ticker(): String {
-        return symbol.orEmpty()
+    fun symbol(): Symbol {
+        return symbol
     }
 
     @CheckResult

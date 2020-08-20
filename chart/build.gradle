@@ -64,5 +64,5 @@ dependencies {
 
     implementation "com.robinhood.spark:spark:$spark"
 
-    api project(':core')
+    api project(':finance')
 }

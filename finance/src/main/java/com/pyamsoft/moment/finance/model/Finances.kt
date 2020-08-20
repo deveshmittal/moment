@@ -37,15 +37,24 @@ object Finances {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private val tradeFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX") }
+    private val iexFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX") }
+
+    @SuppressLint("SimpleDateFormat")
+    private val tiingoFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") }
 
     @SuppressLint("SimpleDateFormat")
     private val infoFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd") }
 
     @JvmStatic
     @CheckResult
-    fun parseTradeDate(date: String): Date {
-        return requireNotNull(tradeFormatter.get()).parse(date) ?: INVALID_TIME
+    fun parseIexDate(date: String): Date {
+        return requireNotNull(iexFormatter.get()).parse(date) ?: INVALID_TIME
+    }
+
+    @JvmStatic
+    @CheckResult
+    fun parseTiingoDate(date: String): Date {
+        return requireNotNull(tiingoFormatter.get()).parse(date) ?: INVALID_TIME
     }
 
     @JvmStatic

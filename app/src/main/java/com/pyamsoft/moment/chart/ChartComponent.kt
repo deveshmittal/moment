@@ -21,6 +21,7 @@ import androidx.annotation.CheckResult
 import androidx.lifecycle.ViewModelProvider
 import com.pyamsoft.moment.ThemeProviderModule
 import com.pyamsoft.moment.core.MomentViewModelFactory
+import com.pyamsoft.moment.finance.model.Symbol
 import com.pyamsoft.pydroid.arch.UiViewModel
 import dagger.Binds
 import dagger.BindsInstance
@@ -38,7 +39,10 @@ internal interface ChartComponent {
     interface Factory {
 
         @CheckResult
-        fun create(@BindsInstance parent: ViewGroup): ChartComponent
+        fun create(
+            @BindsInstance parent: ViewGroup,
+            @BindsInstance symbol: Symbol
+        ): ChartComponent
     }
 
     @Module

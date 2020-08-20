@@ -18,12 +18,20 @@ package com.pyamsoft.moment.finance.model
 
 import androidx.annotation.CheckResult
 
-data class Ticker(internal val ticker: String) {
-
-    private val symbol = Symbol(ticker)
+data class Symbol internal constructor(internal val symbol: String?) {
 
     @CheckResult
-    fun symbol(): Symbol {
-        return symbol
+    fun isValid(): Boolean {
+        return symbol != null
     }
+
+    @CheckResult
+    fun symbol(): String {
+        return symbol.orEmpty()
+    }
+}
+
+@CheckResult
+fun String?.toSymbol(): Symbol {
+    return Symbol(this)
 }

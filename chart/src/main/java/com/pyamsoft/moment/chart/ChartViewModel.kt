@@ -16,28 +16,38 @@
 
 package com.pyamsoft.moment.chart
 
+import androidx.lifecycle.viewModelScope
+import com.pyamsoft.moment.finance.model.Symbol
+import com.pyamsoft.moment.finance.toMonthRange
 import com.pyamsoft.pydroid.arch.UiViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
 class ChartViewModel @Inject internal constructor(
+    private val interactor: ChartInteractor,
+    symbol: Symbol,
     @Named("debug") debug: Boolean
 ) : UiViewModel<ChartViewState, ChartViewEvent, ChartControllerEvent>(
-    initialState = ChartViewState(dataPoints = emptyList()), debug = debug
+    initialState = ChartViewState(
+        symbol = symbol,
+        range = 1.toMonthRange(),
+        dataPoints = emptyList()
+    ), debug = debug
 ) {
 
     init {
         doOnInit {
-            setState {
-                copy(
-                    dataPoints = listOf(
-                        1.0F.toChartData(),
-                        1.5F.toChartData(),
-                        2.0F.toChartData(),
-                        2.5F.toChartData(),
-                        3.0F.toChartData()
-                    )
-                )
+            fetchChart()
+        }
+    }
+
+    private fun fetchChart() {
+        withState {
+            viewModelScope.launch(context = Dispatchers.Default) {
+                val dataPoints = interactor.getChart(symbol, range)
+                setState { copy(dataPoints = dataPoints) }
             }
         }
     }

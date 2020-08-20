@@ -17,11 +17,12 @@
 package com.pyamsoft.moment.chart
 
 import androidx.annotation.CheckResult
+import com.pyamsoft.moment.finance.model.Price
 
 data class ChartDataPoint(val y: Float)
 
 @CheckResult
-fun Float.toChartData(): ChartDataPoint {
-    return ChartDataPoint(this)
+fun Price.toChartData(): ChartDataPoint {
+    return ChartDataPoint(this.close())
 }
 

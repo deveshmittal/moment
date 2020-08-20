@@ -39,27 +39,27 @@ internal interface TiingoService {
     suspend fun tickers(): ResponseBody
 
     @CheckResult
-    @GET("iex/{symbol}")
+    @GET("iex/{ticker}")
     @Headers("Content-Type: application/json")
     suspend fun quote(
-        @Path("symbol") symbol: String,
+        @Path("ticker") ticker: String,
         @Header("Authorization") token: String
     ): List<TiingoQuote>
 
     @CheckResult
-    @GET("tiingo/daily/{symbol}/prices")
+    @GET("tiingo/daily/{ticker}/prices")
     @Headers("Content-Type: application/json")
     suspend fun eod(
-        @Path("symbol") symbol: String,
+        @Path("ticker") ticker: String,
         @Query("startDate") startDate: String?,
         @Header("Authorization") token: String
     ): List<TiingoEodPrice>
 
     @CheckResult
-    @GET("tiingo/daily/{symbol}")
+    @GET("tiingo/daily/{ticker}")
     @Headers("Content-Type: application/json")
     suspend fun info(
-        @Path("symbol") symbol: String,
+        @Path("ticker") ticker: String,
         @Header("Authorization") token: String
     ): TiingoInfo
 }

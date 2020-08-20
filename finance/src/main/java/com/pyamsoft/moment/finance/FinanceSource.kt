@@ -20,6 +20,7 @@ import androidx.annotation.CheckResult
 import com.pyamsoft.moment.finance.model.Meta
 import com.pyamsoft.moment.finance.model.Price
 import com.pyamsoft.moment.finance.model.Quote
+import com.pyamsoft.moment.finance.model.Symbol
 import com.pyamsoft.moment.finance.model.Ticker
 
 interface FinanceSource {
@@ -28,32 +29,24 @@ interface FinanceSource {
     suspend fun tickers(): List<Ticker>
 
     @CheckResult
-    suspend fun quote(symbol: String): Quote
+    suspend fun quote(symbol: Symbol): Quote
 
     @CheckResult
-    suspend fun quotes(vararg symbols: String): List<Quote>
+    suspend fun quotes(vararg symbols: Symbol): List<Quote>
 
     @CheckResult
-    suspend fun price(symbol: String): Price
+    suspend fun price(symbol: Symbol): Price
 
     @CheckResult
-    suspend fun prices(vararg symbols: String): List<Price>
+    suspend fun prices(vararg symbols: Symbol): List<Price>
 
     @CheckResult
-    suspend fun meta(symbol: String): Meta
+    suspend fun meta(symbol: Symbol): Meta
 
     @CheckResult
-    suspend fun metas(vararg symbols: String): List<Meta>
+    suspend fun metas(vararg symbols: Symbol): List<Meta>
 
     @CheckResult
-    suspend fun history(symbol: String, range: DateRange): List<Price>
+    suspend fun history(symbol: Symbol, range: DateRange): List<Price>
 
-    data class DateRange(val time: Int, val unit: RangeUnit) {
-
-        enum class RangeUnit {
-            DAYS,
-            MONTHS,
-            YEARS
-        }
-    }
 }
