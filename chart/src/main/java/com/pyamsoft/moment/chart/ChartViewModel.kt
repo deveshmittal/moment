@@ -19,6 +19,7 @@ package com.pyamsoft.moment.chart
 import androidx.lifecycle.viewModelScope
 import com.pyamsoft.moment.finance.model.Symbol
 import com.pyamsoft.moment.finance.toMonthRange
+import com.pyamsoft.moment.finance.toYearRange
 import com.pyamsoft.pydroid.arch.UiViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,7 +33,7 @@ class ChartViewModel @Inject internal constructor(
 ) : UiViewModel<ChartViewState, ChartViewEvent, ChartControllerEvent>(
     initialState = ChartViewState(
         symbol = symbol,
-        range = 1.toMonthRange(),
+        range = 1.toYearRange(),
         dataPoints = emptyList()
     ), debug = debug
 ) {

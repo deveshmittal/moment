@@ -20,7 +20,7 @@ import androidx.annotation.CheckResult
 import java.util.Date
 
 data class Price(
-    internal val ticker: String?,
+    internal val symbol: Symbol,
     internal val date: String?,
     internal val high: Float?,
     internal val low: Float?,
@@ -29,7 +29,6 @@ data class Price(
     internal val volume: Long?
 ) {
 
-    private val symbol = Symbol(ticker)
     private val tradeDate: Date
 
     init {

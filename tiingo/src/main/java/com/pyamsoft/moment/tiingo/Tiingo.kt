@@ -86,7 +86,7 @@ internal class Tiingo @Inject internal constructor(
             startDate = todayRange
         ).first()
         return@withContext Price(
-            ticker = symbol.symbol(),
+            symbol = symbol,
             close = price.adjClose,
             date = price.date,
             high = price.adjHigh,
@@ -144,15 +144,14 @@ internal class Tiingo @Inject internal constructor(
         withContext(context = Dispatchers.IO) {
             Enforcer.assertOffMainThread()
             val startDate = rangeToString(range.time, range.unit)
-            val prices =
-                service.eod(
-                    token = getAccessToken(),
-                    ticker = symbol.symbol(),
-                    startDate = startDate
-                )
+            val prices = service.eod(
+                token = getAccessToken(),
+                ticker = symbol.symbol(),
+                startDate = startDate
+            )
             return@withContext prices.map { price ->
                 Price(
-                    ticker = symbol.symbol(),
+                    symbol = symbol,
                     close = price.adjClose,
                     date = price.date,
                     high = price.adjHigh,
