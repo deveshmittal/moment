@@ -16,6 +16,7 @@
 
 package com.pyamsoft.moment.chart
 
+import android.graphics.Color
 import android.view.ViewGroup
 import androidx.annotation.CheckResult
 import androidx.core.view.updateLayoutParams
@@ -36,6 +37,11 @@ class ChartView @Inject internal constructor(
     init {
         doOnInflate {
             adapter = MomentChartAdapter().also { it.bindTo(binding.chartviewChart) }
+            binding.chartviewChart.apply {
+                baseLineColor = Color.GREEN
+                lineColor = Color.GREEN
+                scrubLineColor = Color.GREEN
+            }
         }
 
         doOnTeardown {

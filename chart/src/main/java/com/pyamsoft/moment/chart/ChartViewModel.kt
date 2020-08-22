@@ -17,12 +17,15 @@
 package com.pyamsoft.moment.chart
 
 import androidx.lifecycle.viewModelScope
+import com.pyamsoft.highlander.highlander
+import com.pyamsoft.moment.core.repeater
 import com.pyamsoft.moment.finance.model.Symbol
-import com.pyamsoft.moment.finance.toMonthRange
 import com.pyamsoft.moment.finance.toYearRange
 import com.pyamsoft.pydroid.arch.UiViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -34,13 +37,34 @@ class ChartViewModel @Inject internal constructor(
     initialState = ChartViewState(
         symbol = symbol,
         range = 1.toYearRange(),
-        dataPoints = emptyList()
+        dataPoints = emptyList(),
+        lastTrade = Trade.empty(),
+        isUpdating = false
     ), debug = debug
 ) {
+
+    private val periodicPriceUpdater = repeater(TimeUnit.SECONDS.toMillis(15L), instant = true) {
+        updatePrices()
+    }
+
+    private val symbolPriceUpdater = highlander<Trade, Symbol> { symbol ->
+        Timber.d("Updating prices for $symbol")
+        val trade = interactor.getMostRecentTrade(symbol)
+        Timber.d("Most recent trade for $symbol -> $trade")
+        return@highlander trade
+    }
 
     init {
         doOnInit {
             fetchChart()
+        }
+
+        doOnInit {
+            updatePrices()
+        }
+
+        doOnTeardown {
+            periodicPriceUpdater.stop()
         }
     }
 
@@ -53,7 +77,27 @@ class ChartViewModel @Inject internal constructor(
         }
     }
 
+    private fun updatePrices() {
+        withState {
+            viewModelScope.launch(context = Dispatchers.Default) {
+                val trade = symbolPriceUpdater.call(symbol)
+                setState { copy(lastTrade = trade) }
+            }
+        }
+    }
+
     override fun handleViewEvent(event: ChartViewEvent) {
+        return when (event) {
+            is ChartViewEvent.ToggleUpdates -> togglePriceUpdates(event.on)
+        }
+    }
+
+    private fun togglePriceUpdates(on: Boolean) {
+        if (on) {
+            periodicPriceUpdater.start()
+        } else {
+            periodicPriceUpdater.stop()
+        }
     }
 
 }

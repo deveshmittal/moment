@@ -20,6 +20,7 @@ import androidx.annotation.CheckResult
 import com.pyamsoft.moment.finance.DateRange
 import com.pyamsoft.moment.finance.FinanceSource
 import com.pyamsoft.moment.finance.model.Symbol
+import com.pyamsoft.pydroid.core.Enforcer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -36,14 +37,29 @@ internal class ChartInteractor @Inject internal constructor(
         symbol: Symbol,
         range: DateRange
     ): List<ChartDataPoint> = withContext(context = Dispatchers.Default) {
-        if (!symbol.isValid()) {
-            Timber.e("Cannot getChart for invalid symbol")
-            throw IllegalArgumentException("Invalid Symbol passed to getChart")
-        }
-
+        Enforcer.assertOffMainThread()
+        assertValidSymbol(symbol)
         val priceHistory = source.history(symbol, range)
         return@withContext priceHistory.map { it.toChartData() }
     }
 
 
+    @CheckResult
+    suspend fun getMostRecentTrade(symbol: Symbol): Trade = withContext(Dispatchers.Default) {
+        Enforcer.assertOffMainThread()
+        assertValidSymbol(symbol)
+        val quote = source.quote(symbol)
+        return@withContext quote.toTrade()
+    }
+
+    companion object {
+        private fun assertValidSymbol(symbol: Symbol) {
+            if (!symbol.isValid()) {
+                Timber.e("Cannot use invalid symbol")
+                throw IllegalArgumentException("Invalid Symbol passed to function")
+            }
+        }
+    }
 }
+
+

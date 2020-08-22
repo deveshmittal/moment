@@ -16,7 +16,22 @@
 
 package com.pyamsoft.moment.core
 
+import androidx.annotation.CheckResult
+
 const val PRIVACY_POLICY_URL =
     "https://pyamsoft.blogspot.com/p/moment-privacy-policy.html"
 const val TERMS_CONDITIONS_URL =
     "https://pyamsoft.blogspot.com/p/moment-terms-and-conditions.html"
+
+
+@CheckResult
+inline fun <T : Any> threadLocal(crossinline block: () -> T): ThreadLocal<T> {
+    return object : ThreadLocal<T>() {
+
+        override fun initialValue(): T? {
+            return block()
+        }
+
+    }
+
+}

@@ -25,9 +25,14 @@ import com.pyamsoft.pydroid.arch.UiViewState
 data class ChartViewState(
     val symbol: Symbol,
     val range: DateRange,
-    val dataPoints: List<ChartDataPoint>
+    val dataPoints: List<ChartDataPoint>,
+    val lastTrade: Trade,
+    val isUpdating: Boolean
 ) : UiViewState
 
-sealed class ChartViewEvent : UiViewEvent
+sealed class ChartViewEvent : UiViewEvent {
+
+    data class ToggleUpdates internal constructor(val on: Boolean) : ChartViewEvent()
+}
 
 sealed class ChartControllerEvent : UiControllerEvent

@@ -18,23 +18,12 @@ package com.pyamsoft.moment.finance.model
 
 import android.annotation.SuppressLint
 import androidx.annotation.CheckResult
+import com.pyamsoft.moment.core.threadLocal
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
 object Finances {
-
-    @CheckResult
-    private inline fun <T : Any> threadLocal(crossinline block: () -> T): ThreadLocal<T> {
-        return object : ThreadLocal<T>() {
-
-            override fun initialValue(): T? {
-                return block()
-            }
-
-        }
-
-    }
 
     @SuppressLint("SimpleDateFormat")
     private val iexFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX") }
