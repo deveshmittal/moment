@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.tiingo
+package com.pyamsoft.moment.finance.tiingo
 
 import androidx.annotation.CheckResult
 import com.pyamsoft.cachify.Cached
@@ -69,7 +69,9 @@ internal class Tiingo @Inject internal constructor(
     @CheckResult
     override suspend fun quotes(vararg symbols: Symbol): List<Quote> =
         withContext(context = Dispatchers.IO) {
-            return@withContext batch(symbols) { quote(it) }
+            return@withContext batch(
+                symbols
+            ) { quote(it) }
         }
 
     override suspend fun price(symbol: Symbol): Price = withContext(context = Dispatchers.IO) {
@@ -99,7 +101,9 @@ internal class Tiingo @Inject internal constructor(
     @CheckResult
     override suspend fun prices(vararg symbols: Symbol): List<Price> =
         withContext(context = Dispatchers.IO) {
-            return@withContext batch(symbols) { price(it) }
+            return@withContext batch(
+                symbols
+            ) { price(it) }
         }
 
     override suspend fun meta(symbol: Symbol): Meta = withContext(context = Dispatchers.IO) {
@@ -118,7 +122,9 @@ internal class Tiingo @Inject internal constructor(
     @CheckResult
     override suspend fun metas(vararg symbols: Symbol): List<Meta> =
         withContext(context = Dispatchers.IO) {
-            return@withContext batch(symbols) { meta(it) }
+            return@withContext batch(
+                symbols
+            ) { meta(it) }
         }
 
     /**

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.tiingo
+package com.pyamsoft.moment.finance.tiingo
 
 import androidx.annotation.CheckResult
-import com.pyamsoft.moment.tiingo.model.TiingoEodPrice
-import com.pyamsoft.moment.tiingo.model.TiingoInfo
-import com.pyamsoft.moment.tiingo.model.TiingoQuote
+import com.pyamsoft.moment.finance.tiingo.model.TiingoEodPrice
+import com.pyamsoft.moment.finance.tiingo.model.TiingoInfo
+import com.pyamsoft.moment.finance.tiingo.model.TiingoQuote
 import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Header

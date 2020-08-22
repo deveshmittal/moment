@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.tiingo.model
+package com.pyamsoft.moment.finance.tiingo.model
 
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class TiingoEodPrice internal constructor(
-    internal val date: String?,
-    internal val adjHigh: Float?,
-    internal val adjLow: Float?,
-    internal val adjOpen: Float?,
-    internal val adjClose: Float?,
-    internal val adjVolume: Long?
+internal data class TiingoQuote internal constructor(
+    internal val ticker: String?,
+    internal val lastSaleTimestamp: String?,
+    internal val last: Float?,
+    internal val prevClose: Float?
 ) {
     // Needed to generate adapter
     companion object

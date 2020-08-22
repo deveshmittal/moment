@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.tiingo.model
+package com.pyamsoft.moment.finance.tiingo.model
 
 import com.squareup.moshi.JsonClass
 

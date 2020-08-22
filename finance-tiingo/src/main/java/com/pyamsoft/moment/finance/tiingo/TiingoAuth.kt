@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.tiingo
+package com.pyamsoft.moment.finance.tiingo
 
 import android.content.Context
 import android.content.pm.PackageManager

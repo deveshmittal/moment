@@ -111,5 +111,5 @@ dependencies {
 
 	implementation project(":chart")
 	implementation project(":main")
-	implementation project(":tiingo")
+	implementation project(":finance-tiingo")
 }

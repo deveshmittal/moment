@@ -12,10 +12,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package com.pyamsoft.moment.tiingo
+package com.pyamsoft.moment.finance.tiingo
 
 import android.content.Context
 import com.pyamsoft.cachify.Cached
@@ -59,7 +58,10 @@ abstract class TiingoModule {
         @JvmStatic
         @InternalApi
         internal fun provideCache(context: Context, service: TiingoService): Cached<List<String>> {
-            return TiingoTickerCache(context, service)
+            return TiingoTickerCache(
+                context,
+                service
+            )
         }
 
         @Provides

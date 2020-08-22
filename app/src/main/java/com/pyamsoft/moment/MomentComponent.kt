@@ -21,7 +21,7 @@ import android.content.Context
 import androidx.annotation.CheckResult
 import com.pyamsoft.moment.chart.ChartComponent
 import com.pyamsoft.moment.main.MainComponent
-import com.pyamsoft.moment.tiingo.TiingoModule
+import com.pyamsoft.moment.finance.tiingo.TiingoModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module

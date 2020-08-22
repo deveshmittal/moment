@@ -1,5 +1,5 @@
 include ':finance'
-include ':tiingo'
+include ':finance-tiingo'
 include ':chart'
 include ':main'
 include ':core'

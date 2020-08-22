@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.moment.tiingo
+package com.pyamsoft.moment.finance.tiingo
 
 import android.content.Context
 import androidx.annotation.CheckResult
@@ -40,10 +40,13 @@ internal class TiingoTickerCache internal constructor(
 ) : Cached<List<String>> {
 
     // The file to save to
-    private val zipFile = lazy { File(context.applicationContext.cacheDir, ZIP_FILE) }
+    private val zipFile = lazy { File(context.applicationContext.cacheDir,
+        ZIP_FILE
+    ) }
 
     // The upstream, which talks to the network, and saves a zip file
-    private val upstream = ZipFileUpstream(service, zipFile)
+    private val upstream =
+        ZipFileUpstream(service, zipFile)
 
     // Cache in memory for 24 hours
     private val cache = cachify<List<String>>(
@@ -127,7 +130,9 @@ private class ExtractFromDiskStorage internal constructor(
         //
         // This can occur when the memory cache timeout is over, or if the app is opened for a second
         // time after the network was hit once in the past
-        return TiingoZipExtractor.extractArchive(cacheFile)
+        return TiingoZipExtractor.extractArchive(
+            cacheFile
+        )
     }
 
 }
@@ -146,7 +151,9 @@ private class ZipFileUpstream internal constructor(
 
             // We extract the zip file here
             Timber.d("Extract zip file from upstream")
-            TiingoZipExtractor.extractArchive(zipFile)
+            TiingoZipExtractor.extractArchive(
+                zipFile
+            )
         } catch (e: Throwable) {
             Timber.e(e, "Failed to download zip file")
             emptyList()
@@ -219,7 +226,11 @@ private object TiingoZipExtractor {
                 return emptyList()
             }
 
-            return zip.getInputStream(zipEntry).useBuffer { readBufferLines(it) }
+            return zip.getInputStream(zipEntry).useBuffer {
+                readBufferLines(
+                    it
+                )
+            }
         }
     }
 
