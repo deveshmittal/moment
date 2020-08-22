@@ -16,11 +16,21 @@
 
 package com.pyamsoft.moment.finance.tiingo
 
+import android.app.Application
 import android.content.Context
 import com.pyamsoft.cachify.Cached
 import com.pyamsoft.moment.finance.FinanceSource
 import com.pyamsoft.pydroid.bootstrap.network.DelegatingSocketFactory
 import com.squareup.moshi.Moshi
+import com.tinder.scarlet.Lifecycle
+import com.tinder.scarlet.MessageAdapter
+import com.tinder.scarlet.Scarlet
+import com.tinder.scarlet.StreamAdapter
+import com.tinder.scarlet.WebSocket
+import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
+import com.tinder.scarlet.messageadapter.moshi.MoshiMessageAdapter
+import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
+import com.tinder.streamadapter.coroutines.CoroutinesStreamAdapterFactory
 import dagger.Binds
 import dagger.Lazy
 import dagger.Module
@@ -49,7 +59,8 @@ abstract class TiingoModule {
     @Module
     companion object {
 
-        private const val BASE_URL = "https://api.tiingo.com/"
+        private const val REST_URL = "https://api.tiingo.com/"
+        private const val WSS_URL = "wss://api.tiingo.com/iex"
 
         // For some reason we can't @Bind this, why not?
         // complains that @Binds method paramter type must be assignable to return typ
@@ -57,7 +68,10 @@ abstract class TiingoModule {
         @Provides
         @JvmStatic
         @InternalApi
-        internal fun provideCache(context: Context, service: TiingoService): Cached<List<String>> {
+        internal fun provideCache(
+            context: Context,
+            service: TiingoRestService
+        ): Cached<List<String>> {
             return TiingoTickerCache(
                 context,
                 service
@@ -114,7 +128,7 @@ abstract class TiingoModule {
             @InternalApi converterFactory: Converter.Factory
         ): Retrofit {
             return Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(REST_URL)
                 .callFactory(callFactory)
                 .addConverterFactory(converterFactory)
                 .build()
@@ -122,9 +136,70 @@ abstract class TiingoModule {
 
         @Provides
         @JvmStatic
+        @InternalApi
+        internal fun providedMessageAdapterFactory(@InternalApi moshi: Moshi): MessageAdapter.Factory {
+            return MoshiMessageAdapter.Factory(moshi)
+        }
+
+        @Provides
+        @JvmStatic
+        @InternalApi
+        internal fun providedStreamAdapterFactory(): StreamAdapter.Factory {
+            return CoroutinesStreamAdapterFactory()
+        }
+
+        @Provides
+        @JvmStatic
+        @InternalApi
+        internal fun providedLifecycle(application: Application): Lifecycle {
+            return AndroidLifecycle.ofApplicationForeground(application)
+        }
+
+
+        @Provides
+        @JvmStatic
+        @InternalApi
+        internal fun providedWebSocketFactory(@InternalApi client: Lazy<OkHttpClient>): WebSocket.Factory {
+            return object : WebSocket.Factory {
+
+                private val delegate by lazy { client.get().newWebSocketFactory(WSS_URL) }
+
+                override fun create(): WebSocket {
+                    return delegate.create()
+                }
+
+            }
+        }
+
+        @Provides
+        @JvmStatic
+        @InternalApi
+        internal fun createScarlet(
+            @InternalApi lifecycle: Lifecycle,
+            @InternalApi messageAdapterFactory: MessageAdapter.Factory,
+            @InternalApi streamAdapterFactory: StreamAdapter.Factory,
+            @InternalApi webSocketFactory: WebSocket.Factory
+        ): Scarlet {
+            return Scarlet.Builder()
+                .lifecycle(lifecycle)
+                .webSocketFactory(webSocketFactory)
+                .addMessageAdapterFactory(messageAdapterFactory)
+                .addStreamAdapterFactory(streamAdapterFactory)
+                .build()
+        }
+
+        @Provides
+        @JvmStatic
         @Singleton
-        internal fun createService(@InternalApi retrofit: Retrofit): TiingoService {
-            return retrofit.create(TiingoService::class.java)
+        internal fun createWebsocketService(@InternalApi scarlet: Scarlet): TiingoWebSocketService {
+            return scarlet.create(TiingoWebSocketService::class.java)
+        }
+
+        @Provides
+        @JvmStatic
+        @Singleton
+        internal fun createRestService(@InternalApi retrofit: Retrofit): TiingoRestService {
+            return retrofit.create(TiingoRestService::class.java)
         }
     }
 }

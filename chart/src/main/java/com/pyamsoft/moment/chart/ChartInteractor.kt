@@ -48,7 +48,7 @@ internal class ChartInteractor @Inject internal constructor(
     suspend fun getMostRecentTrade(symbol: Symbol): Trade = withContext(Dispatchers.Default) {
         Enforcer.assertOffMainThread()
         assertValidSymbol(symbol)
-        val quote = source.quote(symbol)
+        val quote = source.price(symbol)
         return@withContext quote.toTrade()
     }
 

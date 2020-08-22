@@ -36,7 +36,7 @@ import java.util.zip.ZipFile
 
 internal class TiingoTickerCache internal constructor(
     context: Context,
-    service: TiingoService
+    service: TiingoRestService
 ) : Cached<List<String>> {
 
     // The file to save to
@@ -138,7 +138,7 @@ private class ExtractFromDiskStorage internal constructor(
 }
 
 private class ZipFileUpstream internal constructor(
-    private val service: TiingoService,
+    private val service: TiingoRestService,
     private val zipFile: Lazy<File>
 ) {
 

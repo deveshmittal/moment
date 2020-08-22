@@ -30,7 +30,7 @@ android {
         resConfigs "en"
 
         manifestPlaceholders = [
-            TIINGO_API_KEY: TIINGO_API_KEY
+                TIINGO_API_KEY: TIINGO_API_KEY
         ]
     }
 
@@ -75,9 +75,15 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp"
 
-    implementation "com.tinder.scarlet:scarlet:$scarlet"
+    // API for Dagger
+    api "com.tinder.scarlet:scarlet:$scarlet"
+    implementation "com.tinder.scarlet:websocket-okhttp:$scarlet"
+    implementation "com.tinder.scarlet:lifecycle-android:$scarlet"
     implementation "com.tinder.scarlet:stream-adapter-coroutines:$scarlet"
-    implementation "com.tinder.scarlet:message-adapter-moshi:$scarlet"
+    implementation("com.tinder.scarlet:message-adapter-moshi:$scarlet") {
+        // Stop complaining about duplicate kotlin-reflect
+        exclude group: "org.jetbrains.kotlin"
+    }
 
     api project(':finance')
 }

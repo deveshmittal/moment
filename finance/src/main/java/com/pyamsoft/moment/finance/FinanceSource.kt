@@ -22,17 +22,12 @@ import com.pyamsoft.moment.finance.model.Price
 import com.pyamsoft.moment.finance.model.Quote
 import com.pyamsoft.moment.finance.model.Symbol
 import com.pyamsoft.moment.finance.model.Ticker
+import kotlinx.coroutines.CoroutineScope
 
 interface FinanceSource {
 
     @CheckResult
     suspend fun tickers(): List<Ticker>
-
-    @CheckResult
-    suspend fun quote(symbol: Symbol): Quote
-
-    @CheckResult
-    suspend fun quotes(vararg symbols: Symbol): List<Quote>
 
     @CheckResult
     suspend fun price(symbol: Symbol): Price
@@ -41,12 +36,37 @@ interface FinanceSource {
     suspend fun prices(vararg symbols: Symbol): List<Price>
 
     @CheckResult
+    suspend fun quote(symbol: Symbol): Quote
+
+    @CheckResult
+    suspend fun quotes(vararg symbols: Symbol): List<Quote>
+
+    @CheckResult
     suspend fun meta(symbol: Symbol): Meta
 
     @CheckResult
     suspend fun metas(vararg symbols: Symbol): List<Meta>
 
     @CheckResult
-    suspend fun history(symbol: Symbol, range: DateRange): List<Price>
+    suspend fun history(symbol: Symbol, range: DateRange): List<Quote>
+
+    @CheckResult
+    fun subscribe(
+        scope: CoroutineScope,
+        symbol: Symbol,
+        onUpdate: suspend (Price) -> Unit
+    ): Watcher
+
+    @CheckResult
+    fun subscribe(
+        scope: CoroutineScope,
+        vararg symbols: Symbol,
+        onUpdate: suspend (Price) -> Unit
+    ): Watcher
+
+    interface Watcher {
+
+        fun unsubscribe()
+    }
 
 }

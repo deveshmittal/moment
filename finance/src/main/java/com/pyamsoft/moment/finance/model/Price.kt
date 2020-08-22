@@ -16,55 +16,11 @@
 
 package com.pyamsoft.moment.finance.model
 
-import androidx.annotation.CheckResult
 import java.util.Date
 
 data class Price(
-    internal val symbol: Symbol,
-    internal val date: String?,
-    internal val high: Float?,
-    internal val low: Float?,
-    internal val open: Float?,
-    internal val close: Float?,
-    internal val volume: Long?
-) {
-
-    private val tradeDate: Date
-
-    init {
-        tradeDate = date.let { date ->
-            if (date == null) Finances.INVALID_TIME else Finances.parseTiingoDate(date)
-        }
-    }
-
-    @CheckResult
-    fun symbol(): Symbol {
-        return symbol
-    }
-
-    @CheckResult
-    fun high(): Float {
-        return high ?: Finances.INVALID_PRICE
-    }
-
-    @CheckResult
-    fun low(): Float {
-        return low ?: Finances.INVALID_PRICE
-    }
-
-    @CheckResult
-    fun open(): Float {
-        return open ?: Finances.INVALID_PRICE
-    }
-
-    @CheckResult
-    fun close(): Float {
-        return close ?: Finances.INVALID_PRICE
-    }
-
-    @CheckResult
-    fun volume(): Long {
-        return volume ?: Finances.INVALID_VOLUME
-    }
-
-}
+    val symbol: Symbol,
+    val lastTrade: Date,
+    val price: Float,
+    val previousClose: Float
+)

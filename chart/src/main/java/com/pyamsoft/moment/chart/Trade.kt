@@ -20,7 +20,7 @@ import android.annotation.SuppressLint
 import androidx.annotation.CheckResult
 import com.pyamsoft.moment.core.threadLocal
 import com.pyamsoft.moment.finance.model.Finances
-import com.pyamsoft.moment.finance.model.Quote
+import com.pyamsoft.moment.finance.model.Price
 import java.text.SimpleDateFormat
 
 data class Trade internal constructor(val price: String, val time: String) {
@@ -36,15 +36,15 @@ data class Trade internal constructor(val price: String, val time: String) {
 }
 
 @CheckResult
-fun Quote.toTrade(): Trade {
-    val price = this.price().let { p ->
+fun Price.toTrade(): Trade {
+    val price = this.price.let { p ->
         if (p == Finances.INVALID_PRICE) {
             EMPTY_TRADE
         } else {
             PRICE_FORMAT_STRING.format(p)
         }
     }
-    val time = this.lastTrade().let { t ->
+    val time = this.lastTrade.let { t ->
         if (t == Finances.INVALID_TIME) {
             EMPTY_TIME
         } else {

@@ -16,43 +16,14 @@
 
 package com.pyamsoft.moment.finance.model
 
-import androidx.annotation.CheckResult
 import java.util.Date
 
 data class Quote(
-    internal val ticker: String?,
-    internal val lastTrade: String?,
-    internal val price: Float?,
-    internal val previousClose: Float?
-) {
-
-    private val symbol = Symbol(ticker)
-    private val lastTradeDate: Date
-
-    init {
-        lastTradeDate = lastTrade.let { trade ->
-            if (trade == null) Finances.INVALID_TIME else Finances.parseIexDate(trade)
-        }
-    }
-
-    @CheckResult
-    fun symbol(): Symbol {
-        return symbol
-    }
-
-    @CheckResult
-    fun lastTrade(): Date {
-        return lastTradeDate
-    }
-
-    @CheckResult
-    fun price(): Float {
-        return price ?: Finances.INVALID_PRICE
-    }
-
-    @CheckResult
-    fun previousClose(): Float {
-        return previousClose ?: Finances.INVALID_PRICE
-    }
-
-}
+    val symbol: Symbol,
+    val date: Date,
+    val high: Float,
+    val low: Float,
+    val open: Float,
+    val close: Float,
+    val volume: Long
+)

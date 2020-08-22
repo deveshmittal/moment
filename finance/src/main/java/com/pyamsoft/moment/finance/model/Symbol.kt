@@ -29,6 +29,15 @@ data class Symbol internal constructor(internal val symbol: String?) {
     fun symbol(): String {
         return symbol.orEmpty()
     }
+
+    companion object {
+
+        @JvmStatic
+        @CheckResult
+        fun empty(): Symbol {
+            return Symbol(null)
+        }
+    }
 }
 
 @CheckResult

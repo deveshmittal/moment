@@ -16,51 +16,13 @@
 
 package com.pyamsoft.moment.finance.model
 
-import androidx.annotation.CheckResult
 import java.util.Date
 
 data class Meta(
-    internal val ticker: String?,
-    internal val name: String?,
-    internal val exchange: String?,
-    internal val description: String?,
-    internal val startDate: String?,
-    internal val endDate: String?
-) {
-
-    private val symbol = Symbol(ticker)
-    private val companyStartDate: Date
-    private val companyEndDate: Date
-
-    init {
-        companyStartDate = startDate.let { date ->
-            if (date == null) Finances.INVALID_TIME else Finances.parseInfoDate(date)
-        }
-
-        companyEndDate = endDate.let { date ->
-            if (date == null) Finances.INVALID_TIME else Finances.parseInfoDate(date)
-        }
-    }
-
-    @CheckResult
-    fun symbol(): Symbol {
-        return symbol
-    }
-
-    @CheckResult
-    fun name(): String {
-        return name.orEmpty()
-    }
-
-    @CheckResult
-    fun exchange(): String {
-        return exchange.orEmpty()
-    }
-
-    @CheckResult
-    fun description(): String {
-        return description.orEmpty()
-    }
-
-
-}
+    val symbol: Symbol,
+    val name: String,
+    val exchange: String,
+    val description: String,
+    val startDate: Date,
+    val endDate: Date
+)

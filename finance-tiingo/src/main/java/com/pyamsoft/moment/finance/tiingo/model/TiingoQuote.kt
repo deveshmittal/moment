@@ -20,10 +20,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class TiingoQuote internal constructor(
-    internal val ticker: String?,
-    internal val lastSaleTimestamp: String?,
-    internal val last: Float?,
-    internal val prevClose: Float?
+    internal val date: String?,
+    internal val adjHigh: Float?,
+    internal val adjLow: Float?,
+    internal val adjOpen: Float?,
+    internal val adjClose: Float?,
+    internal val adjVolume: Long?
 ) {
     // Needed to generate adapter
     companion object

@@ -17,9 +17,9 @@
 package com.pyamsoft.moment.finance.tiingo
 
 import androidx.annotation.CheckResult
-import com.pyamsoft.moment.finance.tiingo.model.TiingoEodPrice
-import com.pyamsoft.moment.finance.tiingo.model.TiingoInfo
 import com.pyamsoft.moment.finance.tiingo.model.TiingoQuote
+import com.pyamsoft.moment.finance.tiingo.model.TiingoInfo
+import com.pyamsoft.moment.finance.tiingo.model.TiingoTrade
 import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -31,7 +31,7 @@ import retrofit2.http.Streaming
 /**
  * These functions closely mirror those in Tiingo with an additional header parameter
  */
-internal interface TiingoService {
+internal interface TiingoRestService {
 
     @Streaming
     @CheckResult
@@ -44,7 +44,7 @@ internal interface TiingoService {
     suspend fun quote(
         @Path("ticker") ticker: String,
         @Header("Authorization") token: String
-    ): List<TiingoQuote>
+    ): List<TiingoTrade>
 
     @CheckResult
     @GET("tiingo/daily/{ticker}/prices")
@@ -53,7 +53,7 @@ internal interface TiingoService {
         @Path("ticker") ticker: String,
         @Query("startDate") startDate: String?,
         @Header("Authorization") token: String
-    ): List<TiingoEodPrice>
+    ): List<TiingoQuote>
 
     @CheckResult
     @GET("tiingo/daily/{ticker}")

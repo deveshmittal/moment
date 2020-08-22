@@ -16,47 +16,10 @@
 
 package com.pyamsoft.moment.finance.model
 
-import android.annotation.SuppressLint
-import androidx.annotation.CheckResult
-import com.pyamsoft.moment.core.threadLocal
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
 object Finances {
-
-    @SuppressLint("SimpleDateFormat")
-    private val iexFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX") }
-
-    @SuppressLint("SimpleDateFormat")
-    private val tiingoFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") }
-
-    @SuppressLint("SimpleDateFormat")
-    private val infoFormatter = threadLocal { SimpleDateFormat("yyyy-MM-dd") }
-
-    @JvmStatic
-    @CheckResult
-    fun parseIexDate(date: String): Date {
-        return requireNotNull(iexFormatter.get()).parse(date) ?: INVALID_TIME
-    }
-
-    @JvmStatic
-    @CheckResult
-    fun parseTiingoDate(date: String): Date {
-        return requireNotNull(tiingoFormatter.get()).parse(date) ?: INVALID_TIME
-    }
-
-    @JvmStatic
-    @CheckResult
-    fun parseInfoDate(date: String): Date {
-        return requireNotNull(infoFormatter.get()).parse(date) ?: INVALID_TIME
-    }
-
-    @JvmStatic
-    @CheckResult
-    fun formatInfoDate(date: Date): String {
-        return requireNotNull(infoFormatter.get()).format(date).orEmpty()
-    }
 
     @JvmField
     val INVALID_TIME: Date = Calendar.getInstance().apply { timeInMillis = 0 }.time
