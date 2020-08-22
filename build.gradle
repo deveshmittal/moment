@@ -60,6 +60,8 @@ buildscript {
 		moshi = "1.9.3"
 		retrofit = '2.9.0'
 		okhttp = "4.8.0"
+
+		scarlet = "0.1.9"
 	}
 
 	dependencies {
