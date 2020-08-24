@@ -38,7 +38,7 @@ buildscript {
 		maxSdk = 30
 
 		// Us
-		pydroid = "22.0.3"
+		pydroid = "22.0.4"
 
 		// Leak Canary
 		leakCanary = "2.4"
